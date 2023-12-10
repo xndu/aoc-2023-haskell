@@ -16,8 +16,5 @@ main = do
     let start = (\[h] -> h) $ cmapi (\l i -> cmapi (\e j -> ([(i, j) | e=='S'])) l) ln
     let [m,n] = cmapi (\l i -> cmapi (\e j -> ([(i,j) | start `elem` e])) l) cnx
     let ch = [m, start, n]
-    let ext = fixed (\chn -> case map (\(i,j) -> filter (not . (`elem` chn)) $ cnx!!i!!j) [head chn, last chn] of
-            [[], []]            -> chn
-            [[a], [b]]  | a==b  -> a:chn
-                        | True  -> a:chn++[b]) ch
+    let ext = fixed (\chn -> let (i,j) = head chn in filter (not . (`elem` chn)) (cnx!!i!!j) ++ chn) ch
     print $ length ext `div` 2
